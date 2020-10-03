@@ -15,18 +15,13 @@ import (
 )
 
 type Animal struct {
-	ID        int `gorm:"primary key"`
-	CreatedAt []uint8
-	UpdatedAt []uint8
-	DeletedAt gorm.DeletedAt `gorm:"index"`
-
-	Name  string `gorm:"NOT NULL" json:"name"`
-	Breed string `gorm:"NOT NULL" json:"breed"`
-	Size  int    `gorm:"NOT NULL" json:"size"`
-	Sex   bool   `gorm:"NOT NULL" json:"sex"`
-
-	OwnerID       int      `gorm:"NOT NULL" `
-	Owner         User     `json:"owner"`
+	ID            int      `gorm:"primary key"`
+	Name          string   `gorm:"NOT NULL" json:"name"`
+	Breed         string   `gorm:"NOT NULL" json:"breed"`
+	Size          int      `gorm:"NOT NULL" json:"size"`
+	Sex           bool     `gorm:"NOT NULL" json:"sex"`
+	OwnerID       int      `gorm:"NOT NULL" json:"owner_id"`
+	Owner         User     `gorm:"foreignKey:OwnerID" json:"owner" `
 	Picture       string   `gorm:"NOT NULL" json:"picture"`
 	Wormed        bool     `gorm:"NOT NULL" json:"wormed"`
 	ChildFriendly bool     `gorm:"NOT NULL" json:"child_friendly"`
