@@ -17,7 +17,12 @@ func (s Service) GetAnimal(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		s.logger.Warningf("animal code is not valid")
 		w.WriteHeader(400)
-		_ = json.NewEncoder(w).Encode(map[string]interface{}{"msg": "animal code is not valid"})
+		_ = json.NewEncoder(w).Encode(
+			map[string]interface{}{
+				"msg": "animal code is not valid",
+				"err": "strconv: " + err.Error(),
+			},
+		)
 		return
 	}
 

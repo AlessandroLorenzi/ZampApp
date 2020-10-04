@@ -31,7 +31,7 @@ func New(
 
 	router.HandleFunc("/api/health", s.healthCheck)
 
-	router.HandleFunc("/api/animal/{id_user}", s.GetAnimal)
+	router.HandleFunc("/api/animal/{id_animal}", s.GetAnimal)
 	router.HandleFunc("/api/animal/", s.GetAnimals)
 
 	router.HandleFunc("/api/user/{id_user}", s.GetUser)

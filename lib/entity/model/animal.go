@@ -15,7 +15,7 @@ import (
 )
 
 type Animal struct {
-	ID            int      `gorm:"primary key"`
+	ID            int      `gorm:"primary key" json:"id"`
 	Name          string   `gorm:"NOT NULL" json:"name"`
 	Breed         string   `gorm:"NOT NULL" json:"breed"`
 	Size          int      `gorm:"NOT NULL" json:"size"`
