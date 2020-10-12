@@ -3,6 +3,7 @@ package web
 import (
 	"net/http"
 	"time"
+	"zampapp/lib/entity/model"
 
 	"gorm.io/gorm"
 
@@ -12,18 +13,27 @@ import (
 )
 
 type Service struct {
-	gormDB *gorm.DB
-	server *http.Server
-	logger *logrus.Entry
+	repoService repo
+	gormDB      *gorm.DB // mi serve per test data
+	server      *http.Server
+	logger      *logrus.Entry
+}
+
+type repo interface {
+	GetAnimal(idAnimal int) (model.Animal, error)
+	GetAnimals() ([]model.Animal, error)
+	GetUser(idUser int) (model.User, error)
 }
 
 func New(
 	logger *logrus.Entry,
 	gormDB *gorm.DB,
+	repoService repo,
 ) Service {
 	s := Service{
-		gormDB: gormDB,
-		logger: logger,
+		gormDB:      gormDB,
+		logger:      logger,
+		repoService: repoService,
 	}
 
 	router := mux.NewRouter()
@@ -32,7 +42,7 @@ func New(
 	router.HandleFunc("/api/health", s.healthCheck)
 
 	router.HandleFunc("/api/animal/{id_animal}", s.GetAnimal)
-	router.HandleFunc("/api/animal/", s.GetAnimals)
+	router.HandleFunc("/api/animals", s.GetAnimals)
 
 	router.HandleFunc("/api/user/{id_user}", s.GetUser)
 

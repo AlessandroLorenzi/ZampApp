@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"zampapp/lib/entity/model"
 
 	"github.com/gorilla/mux"
 )
@@ -29,23 +28,19 @@ func (s Service) GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u := model.User{}
-	// Ricerca utente
-	res := s.gormDB.Find(&u, idUser)
-	err = res.Error
+	u, err := s.repoService.GetUser(idUser)
 	if err != nil {
+		if err.Error() == "not found" {
+			s.logger.Warningf("Utente non valido")
+			w.WriteHeader(400)
+			_ = json.NewEncoder(w).Encode(map[string]interface{}{"msg": "User code not valid"})
+			return
+		}
 		s.logger.WithField("error", err).Errorf("Unexpected error")
 		w.WriteHeader(500)
 		_ = json.NewEncoder(w).Encode(
-			map[string]interface{}{"msg": "Unexpected error"},
+			map[string]interface{}{"msg": "unexpected error"},
 		)
-		return
-	}
-
-	if res.RowsAffected != 1 {
-		s.logger.Warningf("Utente non valido")
-		w.WriteHeader(400)
-		_ = json.NewEncoder(w).Encode(map[string]interface{}{"msg": "User code not valid"})
 		return
 	}
 

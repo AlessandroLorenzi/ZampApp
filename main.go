@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 	"zampapp/lib/entity/model"
-	"zampapp/lib/web"
+	"zampapp/lib/interfaces/mysqlrepo"
+	"zampapp/lib/interfaces/web"
 
 	"github.com/sirupsen/logrus"
 
@@ -40,9 +41,15 @@ func main() {
 		loggerEntity.WithField("err", err).Fatal("Error animal migration")
 	}
 
+	repoService := mysqlrepo.New(
+		gormDB,
+		loggerEntity,
+	)
+
 	webservice := web.New(
 		loggerEntity,
 		gormDB,
+		repoService,
 	)
 
 	loggerEntity.Info("Here we GO!")
