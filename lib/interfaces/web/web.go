@@ -35,14 +35,13 @@ func New(
 	logger *logrus.Entry,
 	gormDB *gorm.DB,
 	repoService repo,
-	usecasesService useCasesResolver,
-
+	useCasesService useCasesResolver,
 ) Service {
 	s := Service{
 		gormDB:          gormDB,
 		logger:          logger,
 		repoService:     repoService,
-		usecasesService: usecasesService,
+		usecasesService: useCasesService,
 	}
 
 	router := mux.NewRouter()
