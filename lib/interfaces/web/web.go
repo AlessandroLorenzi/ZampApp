@@ -51,8 +51,9 @@ func New(
 	router.HandleFunc("/api/health", s.healthCheck).Methods("GET")
 	router.HandleFunc("/api/login", s.login).Methods("POST")
 
-	router.HandleFunc("/api/animal/{id_animal}", s.GetAnimal).Methods("GET")
-	router.HandleFunc("/api/animals", s.GetAnimals).Methods("GET")
+	router.HandleFunc("/api/animal/{id_animal}", s.getAnimal).Methods("GET")
+	router.HandleFunc("/api/animal}", s.newAnimal).Methods("POST")
+	router.HandleFunc("/api/animals", s.getAnimals).Methods("GET")
 
 	router.HandleFunc("/api/user/{id_user}", s.GetUser).Methods("GET")
 

@@ -38,14 +38,13 @@ func NewAnimal(
 	Size int,
 	Sex bool,
 	OwnerID int,
-	Owner User,
 	Picture string,
 	Wormed bool,
 	ChildFriendly bool,
 	Position Location,
 	PositionDesc string,
 	Description string,
-) Animal {
+) (Animal, error) {
 	return Animal{
 		ID:            uuid.New().String(),
 		Name:          Name,
@@ -53,14 +52,13 @@ func NewAnimal(
 		Size:          Size,
 		Sex:           Sex,
 		OwnerID:       OwnerID,
-		Owner:         Owner,
 		Picture:       Picture,
 		Wormed:        Wormed,
 		ChildFriendly: ChildFriendly,
 		Position:      Position,
 		PositionDesc:  PositionDesc,
 		Description:   Description,
-	}
+	}, nil
 }
 
 type Location struct {
