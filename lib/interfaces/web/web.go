@@ -1,6 +1,7 @@
 package web
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 	"zampapp/lib/entity/model"
@@ -13,10 +14,11 @@ import (
 )
 
 type Service struct {
-	repoService repo
-	gormDB      *gorm.DB // mi serve per test data
-	server      *http.Server
-	logger      *logrus.Entry
+	repoService     repo
+	gormDB          *gorm.DB // mi serve per test data
+	server          *http.Server
+	logger          *logrus.Entry
+	usecasesService useCasesResolver
 }
 
 type repo interface {
@@ -25,26 +27,34 @@ type repo interface {
 	GetUser(idUser int) (model.User, error)
 }
 
+type useCasesResolver interface {
+	Login(login, password string) (model.User, error)
+}
+
 func New(
 	logger *logrus.Entry,
 	gormDB *gorm.DB,
 	repoService repo,
+	usecasesService useCasesResolver,
+
 ) Service {
 	s := Service{
-		gormDB:      gormDB,
-		logger:      logger,
-		repoService: repoService,
+		gormDB:          gormDB,
+		logger:          logger,
+		repoService:     repoService,
+		usecasesService: usecasesService,
 	}
 
 	router := mux.NewRouter()
 	router.Use(s.loggingMiddleware)
 
-	router.HandleFunc("/api/health", s.healthCheck)
+	router.HandleFunc("/api/health", s.healthCheck).Methods("GET")
+	router.HandleFunc("/api/login", s.login).Methods("POST")
 
-	router.HandleFunc("/api/animal/{id_animal}", s.GetAnimal)
-	router.HandleFunc("/api/animals", s.GetAnimals)
+	router.HandleFunc("/api/animal/{id_animal}", s.GetAnimal).Methods("GET")
+	router.HandleFunc("/api/animals", s.GetAnimals).Methods("GET")
 
-	router.HandleFunc("/api/user/{id_user}", s.GetUser)
+	router.HandleFunc("/api/user/{id_user}", s.GetUser).Methods("GET")
 
 	router.HandleFunc("/api/testdata", s.TestData) // TODO REMOVE
 
@@ -60,9 +70,8 @@ func New(
 
 func (s Service) loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
 
-		s.logger = s.logger.WithField("requestId", 123)
+		s.logger = s.logger.WithField("requestId", 123) // TODO unique request id
 		executionStart := time.Now()
 
 		// Run
@@ -78,4 +87,31 @@ func (s Service) loggingMiddleware(next http.Handler) http.Handler {
 
 func (s Service) ListenAndServe() error {
 	return s.server.ListenAndServe()
+}
+
+type responseContent map[string]interface{}
+
+func (s *Service) webReturn(w http.ResponseWriter, statusCode int, msg string, rcs ...responseContent) {
+
+	rc := make(responseContent)
+	for _, tmpRc := range rcs {
+		for k, v := range tmpRc {
+			rc[k] = v
+		}
+	}
+
+	rc["msg"] = msg
+
+	logger := s.logger.WithFields(logrus.Fields{
+		"code": statusCode,
+	})
+	if statusCode < 500 {
+		logger.Info(msg)
+	} else {
+		logger.Error(msg)
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	_ = json.NewEncoder(w).Encode(rc)
 }

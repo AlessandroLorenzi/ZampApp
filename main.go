@@ -6,6 +6,7 @@ import (
 	"zampapp/lib/entity/model"
 	"zampapp/lib/interfaces/mysqlrepo"
 	"zampapp/lib/interfaces/web"
+	"zampapp/lib/usecases"
 
 	"github.com/sirupsen/logrus"
 
@@ -46,10 +47,13 @@ func main() {
 		loggerEntity,
 	)
 
+	useCasesService := usecases.New(repoService)
+
 	webservice := web.New(
 		loggerEntity,
 		gormDB,
 		repoService,
+		useCasesService,
 	)
 
 	loggerEntity.Info("Here we GO!")

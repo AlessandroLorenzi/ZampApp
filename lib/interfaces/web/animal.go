@@ -1,7 +1,6 @@
 package web
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -15,12 +14,7 @@ func (s Service) GetAnimal(w http.ResponseWriter, r *http.Request) {
 	idAnimal, err := strconv.Atoi(idAnimalStr)
 	if err != nil {
 		s.logger.Warningf("animal code is not valid")
-		w.WriteHeader(400)
-		_ = json.NewEncoder(w).Encode(
-			map[string]interface{}{
-				"msg": "animal code is not valid",
-			},
-		)
+		s.webReturn(w, 400, "animal code is not valid")
 		return
 	}
 
@@ -28,37 +22,24 @@ func (s Service) GetAnimal(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err.Error() == "not found" {
 			s.logger.Warningf("animal code is not valid")
-			w.WriteHeader(400)
-			_ = json.NewEncoder(w).Encode(map[string]interface{}{
-				"msg": "animal code is not valid",
-			})
+			s.webReturn(w, 400, "animal code is not valid")
 			return
 		}
 		s.logger.WithField("error", err).Errorf("Unexpected error")
-		w.WriteHeader(500)
-		_ = json.NewEncoder(w).Encode(
-			map[string]interface{}{
-				"msg": "unexpected error",
-			},
-		)
+		s.webReturn(w, 500, "unexpected error")
 		return
 	}
 
-	_ = json.NewEncoder(w).Encode(a)
+	s.webReturn(w, 200, "ok", responseContent{"animal": a})
 }
 
 func (s Service) GetAnimals(w http.ResponseWriter, r *http.Request) {
 	aa, err := s.repoService.GetAnimals()
 	if err != nil {
 		s.logger.WithField("error", err).Errorf("Unexpected error")
-		w.WriteHeader(500)
-		_ = json.NewEncoder(w).Encode(
-			map[string]interface{}{
-				"msg": "Unexpected error",
-			},
-		)
+		s.webReturn(w, 500, "unexpected error")
+
 		return
 	}
-
-	_ = json.NewEncoder(w).Encode(aa)
+	s.webReturn(w, 200, "ok", responseContent{"animals": aa})
 }

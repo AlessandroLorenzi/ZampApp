@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
+
 	"github.com/sirupsen/logrus"
 
 	"github.com/paulmach/orb"
@@ -15,7 +17,7 @@ import (
 )
 
 type Animal struct {
-	ID            int      `gorm:"primary key" json:"id"`
+	ID            string   `gorm:"primary key" json:"id"`
 	Name          string   `gorm:"NOT NULL" json:"name"`
 	Breed         string   `gorm:"NOT NULL" json:"breed"`
 	Size          int      `gorm:"NOT NULL" json:"size"`
@@ -28,6 +30,37 @@ type Animal struct {
 	Position      Location `gorm:"NOT NULL" json:"position"`
 	PositionDesc  string   `gorm:"NOT NULL" json:"position_desc"`
 	Description   string   `gorm:"NOT NULL" json:"description"`
+}
+
+func NewAnimal(
+	Name string,
+	Breed string,
+	Size int,
+	Sex bool,
+	OwnerID int,
+	Owner User,
+	Picture string,
+	Wormed bool,
+	ChildFriendly bool,
+	Position Location,
+	PositionDesc string,
+	Description string,
+) Animal {
+	return Animal{
+		ID:            uuid.New().String(),
+		Name:          Name,
+		Breed:         Breed,
+		Size:          Size,
+		Sex:           Sex,
+		OwnerID:       OwnerID,
+		Owner:         Owner,
+		Picture:       Picture,
+		Wormed:        Wormed,
+		ChildFriendly: ChildFriendly,
+		Position:      Position,
+		PositionDesc:  PositionDesc,
+		Description:   Description,
+	}
 }
 
 type Location struct {
