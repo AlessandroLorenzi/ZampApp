@@ -15,7 +15,7 @@ type User struct {
 	HashedPassword string `gorm:"NOT NULL" json:"-"`
 }
 
-func NewUser(picture, email, nickname, description, plainPassword string) User {
+func NewUser(picture, email, nickname, description, plainPassword string) (User, error) {
 	u := User{
 		ID:          uuid.New().String(),
 		Picture:     picture,
@@ -25,7 +25,7 @@ func NewUser(picture, email, nickname, description, plainPassword string) User {
 	}
 	u.SetPassword(plainPassword)
 
-	return u
+	return u, nil
 }
 
 func (u *User) SetPassword(password string) {
