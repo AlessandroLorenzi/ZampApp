@@ -5,6 +5,11 @@ import (
 	"zampapp/lib/entity/model"
 )
 
+func (s Service) SaveUser(u model.User) error {
+	tx := s.gormDB.Save(u)
+	return tx.Error
+}
+
 func (s Service) GetUser(idUser int) (model.User, error) {
 	var u model.User
 	res := s.gormDB.Find(&u, idUser)
