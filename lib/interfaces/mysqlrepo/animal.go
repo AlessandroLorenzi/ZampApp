@@ -5,8 +5,8 @@ import (
 	"zampapp/lib/entity/model"
 )
 
-func (s Service) SaveAnimal(a model.Animal) error {
-	tx := s.gormDB.Save(a)
+func (s Service) CreateAnimal(a model.Animal) error {
+	tx := s.gormDB.Create(a)
 	return tx.Error
 }
 
@@ -41,4 +41,15 @@ func (s Service) GetAnimals() ([]model.Animal, error) {
 		}
 	}
 	return aa, res.Error
+}
+
+func (s Service) DeleteAnimal(idAnimal string) error {
+	tx := s.gormDB.Where("id = ?", idAnimal).Delete(model.Animal{})
+
+	return tx.Error
+}
+
+func (s Service) UpdateAnimal(a model.Animal) error {
+	tx := s.gormDB.Save(a)
+	return tx.Error
 }

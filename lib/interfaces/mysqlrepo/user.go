@@ -5,8 +5,8 @@ import (
 	"zampapp/lib/entity/model"
 )
 
-func (s Service) SaveUser(u model.User) error {
-	tx := s.gormDB.Save(u)
+func (s Service) CreateUser(u model.User) error {
+	tx := s.gormDB.Create(u)
 	return tx.Error
 }
 

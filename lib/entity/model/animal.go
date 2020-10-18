@@ -5,19 +5,19 @@ import (
 )
 
 type Animal struct {
-	ID            string   `gorm:"primary key" json:"id"`
-	Name          string   `gorm:"NOT NULL" json:"name"`
-	Breed         string   `gorm:"NOT NULL" json:"breed"`
-	Size          int      `gorm:"NOT NULL" json:"size"`
-	Sex           bool     `gorm:"NOT NULL" json:"sex"`
-	OwnerID       string   `gorm:"NOT NULL" json:"owner_id"`
+	ID            string   `gorm:"type:varchar(36);primaryKey" json:"id"`
+	Name          string   `gorm:"type:varchar(15) NOT NULL" json:"name"`
+	Breed         string   `gorm:"type:varchar(15) NOT NULL" json:"breed"`
+	Size          int      `gorm:"type:int NOT NULL" json:"size"`
+	Sex           bool     `gorm:"type:bool NOT NULL" json:"sex"`
+	OwnerID       string   `gorm:"type:varchar(36) NOT NULL" json:"owner_id"`
 	Owner         User     `gorm:"foreignKey:OwnerID" json:"owner" `
-	Picture       string   `gorm:"NOT NULL" json:"picture"`
-	Wormed        bool     `gorm:"NOT NULL" json:"wormed"`
-	ChildFriendly bool     `gorm:"NOT NULL" json:"child_friendly"`
-	Position      Location `gorm:"NOT NULL" json:"position"`
-	PositionDesc  string   `gorm:"NOT NULL" json:"position_desc"`
-	Description   string   `gorm:"NOT NULL" json:"description"`
+	Picture       string   `gorm:"type:varchar(125) NOT NULL" json:"picture"`
+	Wormed        bool     `gorm:"type:bool NOT NULL" json:"wormed"`
+	ChildFriendly bool     `gorm:"type:bool NOT NULL" json:"child_friendly"`
+	Position      Location `gorm:"type:geometry NOT NULL" json:"position"`
+	PositionDesc  string   `gorm:"type:text NOT NULL" json:"position_desc"`
+	Description   string   `gorm:"type:text NOT NULL" json:"description"`
 }
 
 func NewAnimal(

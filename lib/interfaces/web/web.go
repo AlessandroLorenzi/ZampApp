@@ -22,8 +22,8 @@ type repo interface {
 	GetAnimal(idAnimal string) (model.Animal, error)
 	GetAnimals() ([]model.Animal, error)
 	GetUser(idUser string) (model.User, error)
-	SaveUser(u model.User) error
-	SaveAnimal(a model.Animal) error
+	CreateUser(u model.User) error
+	CreateAnimal(a model.Animal) error
 }
 
 type useCasesResolver interface {

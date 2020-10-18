@@ -44,11 +44,11 @@ func (s Service) TestData(_ http.ResponseWriter, _ *http.Request) {
 		`paperino`,
 	)
 
-	_ = s.repoService.SaveUser(uu[0])
-	_ = s.repoService.SaveUser(uu[1])
-	_ = s.repoService.SaveUser(uu[2])
-	_ = s.repoService.SaveUser(uu[3])
-	_ = s.repoService.SaveUser(uu[4])
+	_ = s.repoService.CreateUser(uu[0])
+	_ = s.repoService.CreateUser(uu[1])
+	_ = s.repoService.CreateUser(uu[2])
+	_ = s.repoService.CreateUser(uu[3])
+	_ = s.repoService.CreateUser(uu[4])
 
 	aa := make([]model.Animal, 4)
 	aa[0], _ = model.NewAnimal(
@@ -117,8 +117,8 @@ func (s Service) TestData(_ http.ResponseWriter, _ *http.Request) {
 		"Cagnetta molto simpatica a cui piacciono i cappelli",
 	)
 
-	_ = s.repoService.SaveAnimal(aa[0])
-	_ = s.repoService.SaveAnimal(aa[1])
-	_ = s.repoService.SaveAnimal(aa[2])
-	_ = s.repoService.SaveAnimal(aa[3])
+	_ = s.repoService.CreateAnimal(aa[0])
+	_ = s.repoService.CreateAnimal(aa[1])
+	_ = s.repoService.CreateAnimal(aa[2])
+	_ = s.repoService.CreateAnimal(aa[3])
 }

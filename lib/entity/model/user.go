@@ -7,12 +7,12 @@ import (
 )
 
 type User struct {
-	ID             string `gorm:"primary key" json:"id"`
-	Picture        string `gorm:"NOT NULL" json:"picture"`
-	Email          string `gorm:"NOT NULL" json:"email"`
-	NickName       string `gorm:"NOT NULL" json:"nick_name"`
-	Description    string `gorm:"NOT NULL" json:"description"`
-	HashedPassword string `gorm:"NOT NULL" json:"-"`
+	ID             string `gorm:"type:varchar(36);primaryKey" json:"id"`
+	Picture        string `gorm:"type:varchar(125) NOT NULL" json:"picture"`
+	Email          string `gorm:"type:varchar(36) NOT NULL" json:"email"`
+	NickName       string `gorm:"type:varchar(36) NOT NULL" json:"nick_name"`
+	Description    string `gorm:"type:NOT NULL" json:"description"`
+	HashedPassword string `gorm:"type:varchar(36) NOT NULL" json:"-"`
 }
 
 func NewUser(picture, email, nickname, description, plainPassword string) (User, error) {
