@@ -25,7 +25,7 @@ func NewAnimal(
 	Breed string,
 	Size int,
 	Sex bool,
-	OwnerID int,
+	OwnerID string,
 	Picture string,
 	Wormed bool,
 	ChildFriendly bool,

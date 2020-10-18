@@ -6,25 +6,24 @@ import (
 	"time"
 	"zampapp/lib/entity/model"
 
-	"gorm.io/gorm"
-
 	"github.com/sirupsen/logrus"
 
 	"github.com/gorilla/mux"
 )
 
 type Service struct {
-	repoService      repo
-	gormDB           *gorm.DB // mi serve per test data
-	server           *http.Server
-	logger           *logrus.Entry
-	useCasessService useCasesResolver
+	repoService     repo
+	server          *http.Server
+	logger          *logrus.Entry
+	useCasesService useCasesResolver
 }
 
 type repo interface {
-	GetAnimal(idAnimal int) (model.Animal, error)
+	GetAnimal(idAnimal string) (model.Animal, error)
 	GetAnimals() ([]model.Animal, error)
-	GetUser(idUser int) (model.User, error)
+	GetUser(idUser string) (model.User, error)
+	SaveUser(u model.User) error
+	SaveAnimal(a model.Animal) error
 }
 
 type useCasesResolver interface {
@@ -33,12 +32,10 @@ type useCasesResolver interface {
 
 func New(
 	logger *logrus.Entry,
-	gormDB *gorm.DB,
 	repoService repo,
 	useCasesService useCasesResolver,
 ) Service {
 	s := Service{
-		gormDB:          gormDB,
 		logger:          logger,
 		repoService:     repoService,
 		useCasesService: useCasesService,

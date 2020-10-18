@@ -5,12 +5,12 @@ import (
 	"zampapp/lib/entity/model"
 )
 
-func (s Service) SaveAnimal(a Animal) error {
+func (s Service) SaveAnimal(a model.Animal) error {
 	tx := s.gormDB.Save(a)
 	return tx.Error
 }
 
-func (s Service) GetAnimal(idAnimal int) (model.Animal, error) {
+func (s Service) GetAnimal(idAnimal string) (model.Animal, error) {
 	var a model.Animal
 	res := s.gormDB.Find(&a, idAnimal)
 	if res.Error != nil {

@@ -3,7 +3,6 @@ package web
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 	"zampapp/lib/entity/model"
 
 	"github.com/gorilla/mux"
@@ -11,14 +10,7 @@ import (
 
 func (s Service) getAnimal(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	idAnimalStr := vars["id_animal"]
-
-	idAnimal, err := strconv.Atoi(idAnimalStr)
-	if err != nil {
-		s.logger.Warningf("animal code is not valid")
-		s.webReturn(w, 400, "animal code is not valid")
-		return
-	}
+	idAnimal := vars["id_animal"]
 
 	a, err := s.repoService.GetAnimal(idAnimal)
 	if err != nil {
@@ -61,7 +53,7 @@ func (s Service) newAnimal(w http.ResponseWriter, r *http.Request) {
 		Breed         string         `json:"breed"`
 		Size          int            `json:"size"`
 		Sex           bool           `json:"sex"`
-		OwnerID       int            `json:"owner_id"`
+		OwnerID       string         `json:"owner_id"`
 		Picture       string         `json:"picture"`
 		Wormed        bool           `json:"wormed"`
 		ChildFriendly bool           `json:"child_friendly"`

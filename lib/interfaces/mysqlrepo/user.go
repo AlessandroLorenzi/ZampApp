@@ -10,7 +10,12 @@ func (s Service) SaveUser(u model.User) error {
 	return tx.Error
 }
 
-func (s Service) GetUser(idUser int) (model.User, error) {
+func (s Service) GetUsers() (uu []model.User, err error) {
+	tx := s.gormDB.Find(&uu)
+	return uu, tx.Error
+}
+
+func (s Service) GetUser(idUser string) (model.User, error) {
 	var u model.User
 	res := s.gormDB.Find(&u, idUser)
 	if res.RowsAffected != 1 {

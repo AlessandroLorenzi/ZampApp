@@ -8,7 +8,6 @@ import (
 // TODO REMOVE
 func (s Service) TestData(_ http.ResponseWriter, _ *http.Request) {
 	uu := make([]model.User, 5)
-
 	uu[0], _ = model.NewUser(
 		`https://images.pexels.com/photos/2745151/pexels-photo-2745151.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
 		`Antonio`,
@@ -45,63 +44,81 @@ func (s Service) TestData(_ http.ResponseWriter, _ *http.Request) {
 		`paperino`,
 	)
 
-	aa := []model.Animal{
-		{
-			ID:            "1",
-			Name:          "Fufi",
-			Breed:         "Terrier",
-			OwnerID:       1,
-			Picture:       "https://images.pexels.com/photos/733416/pexels-photo-733416.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
-			Wormed:        true,
-			ChildFriendly: true,
-			Sex:           true,
-			Position: model.Location{
-				X: 1.02332049,
-				Y: 2.32490,
-			},
-			PositionDesc: "Allevamento tal de tali",
-			Description:  "Cane terrier molto simpatico",
-		},
-		{
-			ID:            "2",
-			Name:          "Fido",
-			Breed:         "Dalmata",
-			OwnerID:       1,
-			Picture:       "https://images.pexels.com/photos/933498/pexels-photo-933498.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-			Wormed:        true,
-			ChildFriendly: true,
-			Sex:           true,
-			Position: model.Location{
-				X: 1.02332049,
-				Y: 2.32490,
-			},
-			PositionDesc: "Allevamento tal de tali",
-			Description:  "Dalmata super ammaestrato. bravo",
-		},
-		{
-			ID:            "3",
-			Name:          "Witch",
-			Breed:         "Boxer",
-			OwnerID:       2,
-			Picture:       "https://images.pexels.com/photos/5422769/pexels-photo-5422769.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-			Wormed:        true,
-			ChildFriendly: true,
-			Sex:           false,
-			Position: model.Location{
-				X: 1.01231239,
-				Y: 2.335490,
-			},
-			PositionDesc: "Allevamento talaltro",
-			Description:  "Cagnetta molto simpatica a cui piacciono i cappelli",
-		},
-	}
+	_ = s.repoService.SaveUser(uu[0])
+	_ = s.repoService.SaveUser(uu[1])
+	_ = s.repoService.SaveUser(uu[2])
+	_ = s.repoService.SaveUser(uu[3])
+	_ = s.repoService.SaveUser(uu[4])
 
-	ret := s.gormDB.Create(uu)
-	if ret.Error != nil {
-		s.logger.Errorf("Errore utenti %v", ret.Error)
-	}
-	ret = s.gormDB.Create(aa)
-	if ret.Error != nil {
-		s.logger.Errorf("Errore animali %v", ret.Error)
-	}
+	aa := make([]model.Animal, 4)
+	aa[0], _ = model.NewAnimal(
+		"Fufi",
+		"Terrier",
+		1,
+		true,
+		uu[0].ID,
+		"https://images.pexels.com/photos/733416/pexels-photo-733416.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
+		true,
+		true,
+		model.Location{
+			X: 1.02332049,
+			Y: 2.32490,
+		},
+		"Allevamento tal de tali",
+		"Cane terrier molto simpatico",
+	)
+
+	aa[1], _ = model.NewAnimal(
+		"Fufi",
+		"Terrier",
+		1,
+		true,
+		uu[0].ID,
+		"https://images.pexels.com/photos/733416/pexels-photo-733416.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
+		true,
+		true,
+		model.Location{
+			X: 1.02332049,
+			Y: 2.32490,
+		},
+		"Allevamento tal de tali",
+		"Cane terrier molto simpatico",
+	)
+	aa[2], _ = model.NewAnimal(
+		"Fido",
+		"Dalmata",
+		1,
+		false,
+		uu[1].ID,
+		"https://images.pexels.com/photos/933498/pexels-photo-933498.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+		true,
+		true,
+		model.Location{
+			X: 1.02332049,
+			Y: 2.32490,
+		},
+		"Allevamento tal de tali",
+		"Dalmata super ammaestrato. bravo",
+	)
+	aa[3], _ = model.NewAnimal(
+		"Witch",
+		"Boxer",
+		2,
+		false,
+		uu[1].ID,
+		"https://images.pexels.com/photos/5422769/pexels-photo-5422769.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+		true,
+		true,
+		model.Location{
+			X: 1.01231239,
+			Y: 2.335490,
+		},
+		"Allevamento talaltro",
+		"Cagnetta molto simpatica a cui piacciono i cappelli",
+	)
+
+	_ = s.repoService.SaveAnimal(aa[0])
+	_ = s.repoService.SaveAnimal(aa[1])
+	_ = s.repoService.SaveAnimal(aa[2])
+	_ = s.repoService.SaveAnimal(aa[3])
 }

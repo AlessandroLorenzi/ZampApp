@@ -3,26 +3,13 @@ package web
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
 )
 
 func (s *Service) GetUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	idUserStr := vars["id_user"]
-
-	// Sanificazione input
-	if idUserStr == "" {
-		s.webReturn(w, 400, "user code not valid")
-		return
-	}
-
-	idUser, err := strconv.Atoi(idUserStr)
-	if err != nil {
-		s.webReturn(w, 400, "user code not valid")
-		return
-	}
+	idUser := vars["id_user"]
 
 	u, err := s.repoService.GetUser(idUser)
 	if err != nil {

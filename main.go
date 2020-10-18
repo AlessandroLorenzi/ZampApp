@@ -51,7 +51,6 @@ func main() {
 
 	webservice := web.New(
 		loggerEntity,
-		gormDB,
 		repoService,
 		useCasesService,
 	)
