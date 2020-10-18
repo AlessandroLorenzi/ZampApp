@@ -35,7 +35,7 @@ func (s Service) getAnimal(w http.ResponseWriter, r *http.Request) {
 	s.webReturn(w, 200, "ok", responseContent{"animal": a})
 }
 
-func (s Service) getAnimals(w http.ResponseWriter, r *http.Request) {
+func (s Service) getAnimals(w http.ResponseWriter, _ *http.Request) {
 	aa, err := s.repoService.GetAnimals()
 	if err != nil {
 		s.logger.WithField("error", err).Errorf("Unexpected error")

@@ -14,11 +14,11 @@ import (
 )
 
 type Service struct {
-	repoService     repo
-	gormDB          *gorm.DB // mi serve per test data
-	server          *http.Server
-	logger          *logrus.Entry
-	usecasesService useCasesResolver
+	repoService      repo
+	gormDB           *gorm.DB // mi serve per test data
+	server           *http.Server
+	logger           *logrus.Entry
+	useCasessService useCasesResolver
 }
 
 type repo interface {
@@ -41,7 +41,7 @@ func New(
 		gormDB:          gormDB,
 		logger:          logger,
 		repoService:     repoService,
-		usecasesService: useCasesService,
+		useCasesService: useCasesService,
 	}
 
 	router := mux.NewRouter()

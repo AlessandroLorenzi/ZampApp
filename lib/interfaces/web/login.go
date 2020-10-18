@@ -30,7 +30,7 @@ func (s *Service) login(w http.ResponseWriter, r *http.Request) {
 		continue
 	}
 
-	u, err := s.usecasesService.Login(lp.Login, lp.Password)
+	u, err := s.useCasesService.Login(lp.Login, lp.Password)
 	if err != nil {
 		s.webReturn(w, 400, "login not valid", responseContent{
 			"error": err.Error(),

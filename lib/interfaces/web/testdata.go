@@ -6,38 +6,38 @@ import (
 )
 
 // TODO REMOVE
-func (s Service) TestData(w http.ResponseWriter, r *http.Request) {
+func (s Service) TestData(_ http.ResponseWriter, _ *http.Request) {
 	uu := make([]model.User, 5)
 
-	uu[0] = model.NewUser(
+	uu[0], _ = model.NewUser(
 		`https://images.pexels.com/photos/2745151/pexels-photo-2745151.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
 		`Antonio`,
 		`antonio@test.it`,
 		`Amo i cani`,
 		`pippo`,
 	)
-	uu[1] = model.NewUser(
+	uu[1], _ = model.NewUser(
 		`https://images.pexels.com/photos/3294248/pexels-photo-3294248.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260`,
 		`Anna`,
 		`anna@casa.it`,
 		`Amo gli cani tutti`,
 		`pluto`,
 	)
-	uu[2] = model.NewUser(
+	uu[2], _ = model.NewUser(
 		`https://images.pexels.com/photos/2666154/pexels-photo-2666154.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260`,
 		`Giovanna`,
 		`giovanna@gmail.com`,
 		`Ho un bastardino che mi piace tanto`,
 		`paperino`,
 	)
-	uu[3] = model.NewUser(
+	uu[3], _ = model.NewUser(
 		`https://images.pexels.com/photos/4064423/pexels-photo-4064423.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260`,
 		`Silvana`,
 		`silvana@coseacaso.it`,
-		`Sono una gattara`,
+		`Mi piacciono i gatti`,
 		`paperino`,
 	)
-	uu[4] = model.NewUser(
+	uu[4], _ = model.NewUser(
 		`https://images.pexels.com/photos/3889895/pexels-photo-3889895.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260`,
 		`Eliana`,
 		`eliana@blabla.it`,
@@ -46,7 +46,7 @@ func (s Service) TestData(w http.ResponseWriter, r *http.Request) {
 	)
 
 	aa := []model.Animal{
-		model.Animal{
+		{
 			ID:            "1",
 			Name:          "Fufi",
 			Breed:         "Terrier",
@@ -62,7 +62,7 @@ func (s Service) TestData(w http.ResponseWriter, r *http.Request) {
 			PositionDesc: "Allevamento tal de tali",
 			Description:  "Cane terrier molto simpatico",
 		},
-		model.Animal{
+		{
 			ID:            "2",
 			Name:          "Fido",
 			Breed:         "Dalmata",
@@ -78,7 +78,7 @@ func (s Service) TestData(w http.ResponseWriter, r *http.Request) {
 			PositionDesc: "Allevamento tal de tali",
 			Description:  "Dalmata super ammaestrato. bravo",
 		},
-		model.Animal{
+		{
 			ID:            "3",
 			Name:          "Witch",
 			Breed:         "Boxer",
