@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"time"
-	"zampapp/lib/entity/model"
+	"zampapp/lib/interfaces/mysqlrepo"
+	"zampapp/lib/usecases"
 
 	"github.com/sirupsen/logrus"
 
@@ -12,28 +13,16 @@ import (
 )
 
 type Service struct {
-	repoService     repo
+	repoService     mysqlrepo.Service
 	server          *http.Server
 	logger          *logrus.Entry
-	useCasesService useCasesResolver
-}
-
-type repo interface {
-	GetAnimal(idAnimal string) (model.Animal, error)
-	GetAnimals() ([]model.Animal, error)
-	GetUser(idUser string) (model.User, error)
-	CreateUser(u model.User) error
-	CreateAnimal(a model.Animal) error
-}
-
-type useCasesResolver interface {
-	Login(login, password string) (model.User, error)
+	useCasesService usecases.Service
 }
 
 func New(
 	logger *logrus.Entry,
-	repoService repo,
-	useCasesService useCasesResolver,
+	repoService mysqlrepo.Service,
+	useCasesService usecases.Service,
 ) Service {
 	s := Service{
 		logger:          logger,

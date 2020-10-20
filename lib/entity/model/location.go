@@ -18,8 +18,6 @@ type Location struct {
 
 // Scan implements the sql.Scanner interface
 func (loc *Location) Scan(v interface{}) error {
-	// Scan a value into struct from database driver
-	//err := json.Unmarshal(v, loc)
 	if v == nil {
 		return nil
 	}
