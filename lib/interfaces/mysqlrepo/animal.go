@@ -12,7 +12,7 @@ func (s Service) CreateAnimal(a model.Animal) error {
 
 func (s Service) GetAnimal(idAnimal string) (model.Animal, error) {
 	var a model.Animal
-	res := s.gormDB.Find(&a, idAnimal)
+	res := s.gormDB.Where("id = ?", idAnimal).Find(&a)
 	if res.Error != nil {
 		return a, res.Error
 	}
@@ -45,7 +45,6 @@ func (s Service) GetAnimals() ([]model.Animal, error) {
 
 func (s Service) DeleteAnimal(idAnimal string) error {
 	tx := s.gormDB.Where("id = ?", idAnimal).Delete(model.Animal{})
-
 	return tx.Error
 }
 

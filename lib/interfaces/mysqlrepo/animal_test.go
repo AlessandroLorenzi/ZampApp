@@ -42,8 +42,41 @@ func Test_Animal(t *testing.T) {
 	assert.Nil(t, err)
 
 	err = s.CreateAnimal(a)
+	assert.NotNil(t, err)
 	assert.Contains(t, err.Error(), "Duplicate entry")
 
+	// Test GetAnimals
+	aa, err := s.GetAnimals()
+
+	assert.Nil(t, err)
+	assert.NotEmpty(t, aa)
+
+	// Test UpdateAnimal
+	a.Description = "updated description"
+	err = s.UpdateAnimal(a)
+	assert.Nil(t, err)
+
+	// Test GetAnimal
+	a1, err := s.GetAnimal(a.ID)
+
+	assert.Nil(t, err)
+	assert.Equal(t, a.ID, a1.ID)
+	assert.Equal(t, "updated description", a1.Description)
+
+	// Delete test animal & user
 	err = s.DeleteAnimal(a.ID)
 	assert.Nil(t, err)
+
+	err = s.DeleteUser(u.ID)
+	assert.Nil(t, err)
+}
+
+func TestService_GetAnimal_NotFound(t *testing.T) {
+	s := generateTestService(t)
+
+	_, err := s.GetAnimal("id-false")
+
+	assert.NotNil(t, err)
+	assert.Equal(t, "not found", err.Error())
+
 }

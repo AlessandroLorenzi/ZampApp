@@ -17,7 +17,7 @@ func (s Service) GetUsers() (uu []model.User, err error) {
 
 func (s Service) GetUser(idUser string) (model.User, error) {
 	var u model.User
-	res := s.gormDB.Find(&u, idUser)
+	res := s.gormDB.Where(`id = ?`, idUser).Find(&u)
 	if res.RowsAffected != 1 {
 		return u, errors.New("not found")
 	}
@@ -28,4 +28,14 @@ func (s Service) GetUserByLogin(username string) (model.User, error) {
 	var u model.User
 	tx := s.gormDB.Where("nick_name = ? OR email = ?", username, username).First(&u)
 	return u, tx.Error
+}
+
+func (s Service) DeleteUser(idUser string) error {
+	tx := s.gormDB.Where("id = ?", idUser).Delete(model.User{})
+	return tx.Error
+}
+
+func (s Service) UpdateUser(u model.User) error {
+	tx := s.gormDB.Save(u)
+	return tx.Error
 }
