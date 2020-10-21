@@ -1,16 +1,14 @@
 package usecases
 
-import "zampapp/lib/entity/model"
+import (
+	"zampapp/lib/interfaces/mysqlrepo"
+)
 
 type Service struct {
-	repoService repo
+	repoService mysqlrepo.Service
 }
 
-type repo interface {
-	GetUserByLogin(string) (model.User, error)
-}
-
-func New(repoService repo) Service {
+func New(repoService mysqlrepo.Service) Service {
 	return Service{
 		repoService: repoService,
 	}

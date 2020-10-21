@@ -24,10 +24,14 @@ func Test_User(t *testing.T) {
 	err = s.UpdateUser(u)
 	assert.Nil(t, err)
 
-	u, err = s.GetUser(u.ID)
+	uFetched, err := s.GetUser(u.ID)
 
 	assert.Nil(t, err)
-	assert.Equal(t, "test update", u.Description)
+	assert.Equal(t, u.Description, uFetched.Description)
+	assert.Equal(t, u.Picture, uFetched.Picture)
+	assert.Equal(t, u.ID, uFetched.ID)
+	assert.Equal(t, u.NickName, uFetched.NickName)
+	assert.Equal(t, u.Email, uFetched.Email)
 
 	err = s.DeleteUser(u.ID)
 
