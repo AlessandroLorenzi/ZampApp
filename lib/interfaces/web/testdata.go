@@ -1,12 +1,13 @@
 package web
 
 import (
-	"net/http"
 	"zampapp/lib/entity/model"
+
+	"github.com/gin-gonic/gin"
 )
 
 // TODO REMOVE
-func (s Service) TestData(_ http.ResponseWriter, _ *http.Request) {
+func (s Service) TestData(_ *gin.Context) {
 	uu := make([]model.User, 5)
 	uu[0], _ = model.NewUser(
 		`https://images.pexels.com/photos/2745151/pexels-photo-2745151.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,

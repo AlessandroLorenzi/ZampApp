@@ -1,76 +1,58 @@
 package web
 
 import (
-	"encoding/json"
-	"net/http"
 	"zampapp/lib/entity/model"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
-func (s Service) getAnimal(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	idAnimal := vars["id_animal"]
+func (s Service) getAnimal(c *gin.Context) {
+	idAnimal := c.Param("id_animal")
 
 	a, err := s.repoService.GetAnimal(idAnimal)
 	if err != nil {
 		if err.Error() == "not found" {
-			s.logger.Warningf("animal code is not valid")
-			s.webReturn(w, 400, "animal code is not valid")
+			c.JSON(400, gin.H{"msg": "animal not found"})
 			return
 		}
-		s.logger.WithField("error", err).Errorf("Unexpected error")
-		s.webReturn(w, 500, "unexpected error")
+		c.JSON(500, gin.H{"msg": "unexpected error"})
 		return
 	}
 
-	s.webReturn(w, 200, "ok", responseContent{"animal": a})
+	c.JSON(200, gin.H{"msg": "ok", "animal": a})
 }
 
-func (s Service) getAnimals(w http.ResponseWriter, _ *http.Request) {
+func (s Service) getAnimals(c *gin.Context) {
 	aa, err := s.repoService.GetAnimals()
 	if err != nil {
-		s.logger.WithField("error", err).Errorf("Unexpected error")
-		s.webReturn(w, 500, "unexpected error")
-
+		c.JSON(500, gin.H{"msg": "unexpected error"})
 		return
 	}
-	s.webReturn(w, 200, "ok", responseContent{"animals": aa})
+	c.JSON(200, gin.H{"msg": "ok", "animals": aa})
 }
 
-func (s Service) newAnimal(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		s.webReturn(w, 400, "impossible to get parse form")
-	}
-	if len(r.Form) != 1 {
-		s.webReturn(w, 400, "empty document")
-		return
-	}
-
+func (s Service) newAnimal(c *gin.Context) {
 	type newAnimalPost struct {
-		Name          string         `json:"name"`
-		Breed         string         `json:"breed"`
-		Size          int            `json:"size"`
-		Sex           bool           `json:"sex"`
-		OwnerID       string         `json:"owner_id"`
-		Picture       string         `json:"picture"`
-		Wormed        bool           `json:"wormed"`
-		ChildFriendly bool           `json:"child_friendly"`
-		Position      model.Location `json:"position"`
-		PositionDesc  string         `json:"position_desc"`
-		Description   string         `json:"description"`
+		Name          string         `json:"name" binding:"required"`
+		Breed         string         `json:"breed" binding:"required"`
+		Size          int            `json:"size" binding:"required"`
+		Sex           bool           `json:"sex" binding:"required"`
+		OwnerID       string         `json:"owner_id" binding:"required"`
+		Picture       string         `json:"picture" binding:"required"`
+		Wormed        bool           `json:"wormed" binding:"required"`
+		ChildFriendly bool           `json:"child_friendly" binding:"required"`
+		Position      model.Location `json:"position" binding:"required"`
+		PositionDesc  string         `json:"position_desc" binding:"required"`
+		Description   string         `json:"description" binding:"required"`
 	}
 
 	var ap newAnimalPost
-
-	for key := range r.Form {
-		err := json.Unmarshal([]byte(key), &ap)
-		if err != nil {
-			s.webReturn(w, 400, "document not valid")
-			return
-		}
-		continue
+	if err := c.ShouldBindJSON(&ap); err != nil {
+		s.logger.Debug("Error login", err)
+		c.JSON(400, gin.H{
+			"msg": "not valid",
+		})
+		return
 	}
 
 	a, err := model.NewAnimal(
@@ -87,14 +69,14 @@ func (s Service) newAnimal(w http.ResponseWriter, r *http.Request) {
 		ap.Description,
 	)
 	if err != nil {
-		s.webReturn(w, 400, "document error", responseContent{"error": err.Error()})
+		c.JSON(400, gin.H{
+			"msg": "not valid",
+		})
 		return
 	}
 
-	s.webReturn(w, 200, "token generated",
-		responseContent{
-			"animal": a,
-		},
-	)
-
+	c.JSON(200, gin.H{
+		"msg":    "ok",
+		"animal": a,
+	})
 }

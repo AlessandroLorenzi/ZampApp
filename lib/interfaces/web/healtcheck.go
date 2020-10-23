@@ -1,9 +1,7 @@
 package web
 
-import (
-	"net/http"
-)
+import "github.com/gin-gonic/gin"
 
-func (s Service) healthCheck(w http.ResponseWriter, _ *http.Request) {
-	s.webReturn(w, 200, "ok")
+func (s Service) healthCheck(c *gin.Context) {
+	c.JSON(200, gin.H{"msg": "ok"})
 }
