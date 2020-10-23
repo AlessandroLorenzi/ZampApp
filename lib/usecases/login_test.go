@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"fmt"
+	"os"
 	"testing"
 	"zampapp/lib/entity/model"
 	"zampapp/lib/interfaces/mysqlrepo"
@@ -16,10 +17,10 @@ import (
 func Test_Login(t *testing.T) {
 	connString := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s",
-		"zampapp",
-		"zampapp",
-		"127.0.0.1",
-		"zampapp",
+		os.Getenv("MYSQL_USER"),
+		os.Getenv("MYSQL_PASSWORD"),
+		os.Getenv("MYSQL_HOST"),
+		os.Getenv("MYSQL_DB"),
 	)
 	gormDB, _ := gorm.Open(mysql.Open(connString), &gorm.Config{})
 

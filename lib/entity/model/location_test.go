@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"gorm.io/driver/mysql"
@@ -13,10 +14,10 @@ import (
 func Test_Location(t *testing.T) {
 	connString := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s",
-		"zampapp",
-		"zampapp",
-		"127.0.0.1",
-		"zampapp",
+		os.Getenv("MYSQL_USER"),
+		os.Getenv("MYSQL_PASSWORD"),
+		os.Getenv("MYSQL_HOST"),
+		os.Getenv("MYSQL_DB"),
 	)
 	gormDB, err := gorm.Open(mysql.Open(connString), &gorm.Config{})
 	if err != nil {

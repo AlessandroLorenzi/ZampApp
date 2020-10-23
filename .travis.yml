@@ -5,4 +5,10 @@ go:
   - 1.14.x
   - 1.15.x
 
+services:
+  - mysql
 script: go test ${gobuild_args} ./...
+
+env:
+  - MYSQL_HOST=127.0.0.1
+  - MYSQL_USER=travis
