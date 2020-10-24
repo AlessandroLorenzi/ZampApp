@@ -26,7 +26,7 @@ func New(
 		useCasesService: useCasesService,
 	}
 
-	router := gin.Default()
+	router := gin.New()
 
 	router.GET("/api/health", s.healthCheck)
 	router.POST("/api/login", s.login)

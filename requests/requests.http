@@ -1,0 +1,17 @@
+### Healthcheck
+GET http://localhost:8080/api/health
+Accept: application/json
+
+### Healthcheck
+GET http://localhost:8080/api/testdata
+Accept: application/json
+
+### login
+POST http://localhost:8080/api/login
+Accept: application/json
+
+{
+  "login": "antonio",
+  "password": "pippo"
+}
+

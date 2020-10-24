@@ -6,6 +6,17 @@ import (
 )
 
 func (s Service) CreateUser(u model.User) error {
+	_, err := s.GetUserByLogin(u.Email)
+
+	if err != nil && err.Error() != "record not found" {
+		return err
+	}
+
+	_, err = s.GetUserByLogin(u.NickName)
+	if err != nil && err.Error() != "record not found" {
+		return err
+	}
+
 	tx := s.gormDB.Create(u)
 	return tx.Error
 }
@@ -26,7 +37,20 @@ func (s Service) GetUser(idUser string) (model.User, error) {
 
 func (s Service) GetUserByLogin(nickOrEmail string) (model.User, error) {
 	var u model.User
+
 	tx := s.gormDB.Where("nick_name = ? OR email = ?", nickOrEmail, nickOrEmail).First(&u)
+	if tx.Error != nil {
+		return u, tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return u, errors.New("not found")
+	}
+	if tx.RowsAffected > 1 {
+		s.logger.WithField("nickOrEmail", nickOrEmail).Error("multiple records found for nickOrEmail")
+		return u, errors.New("multiple found")
+	}
+
 	return u, tx.Error
 }
 

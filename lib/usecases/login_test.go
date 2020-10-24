@@ -15,6 +15,7 @@ import (
 )
 
 func Test_Login(t *testing.T) {
+	var err error
 	connString := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s",
 		os.Getenv("MYSQL_USER"),
@@ -35,8 +36,10 @@ func Test_Login(t *testing.T) {
 		`Amo i cani`,
 		`pippo`,
 	)
-	_ = repoService.CreateUser(u)
-
+	err = repoService.CreateUser(u)
+	if err != nil {
+		t.Fatal("Cannot create test user:", err)
+	}
 	useCasesService := New(repoService)
 	theUser, err := useCasesService.Login(`antonio`, `pippo`)
 

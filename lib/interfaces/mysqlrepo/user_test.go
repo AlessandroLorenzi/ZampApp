@@ -41,4 +41,6 @@ func Test_User(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Equal(t, "not found", err.Error())
 
+	//u1, err := s.GetUserByLogin(u.Email)
+
 }

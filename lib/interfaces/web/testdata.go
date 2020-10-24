@@ -11,8 +11,8 @@ func (s Service) TestData(_ *gin.Context) {
 	uu := make([]model.User, 5)
 	uu[0], _ = model.NewUser(
 		`https://images.pexels.com/photos/2745151/pexels-photo-2745151.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
-		`Antonio`,
 		`antonio@test.it`,
+		`antonio`,
 		`Amo i cani`,
 		`pippo`,
 	)

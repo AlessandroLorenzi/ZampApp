@@ -10,14 +10,20 @@ import (
 func Test_Animal(t *testing.T) {
 	s := generateTestService(t)
 
-	u, _ := model.NewUser(
+	u, err := model.NewUser(
 		`https://images.pexels.com/photos/2745151/pexels-photo-2745151.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
-		`Antonio`,
+		`antonio`,
 		`antonio@test.it`,
 		`Amo i cani`,
 		`pippo`,
 	)
-	_ = s.CreateUser(u)
+	if err != nil {
+		t.Fatal("Cant create test user:", err)
+	}
+	err = s.CreateUser(u)
+	if err != nil {
+		t.Fatal("Cant create test user:", err)
+	}
 
 	a, _ := model.NewAnimal(
 		"Fufi",
@@ -35,8 +41,6 @@ func Test_Animal(t *testing.T) {
 		"Allevamento tal de tali",
 		"Cane terrier molto simpatico",
 	)
-
-	var err error
 
 	err = s.CreateAnimal(a)
 	assert.Nil(t, err)
