@@ -8,7 +8,7 @@ import (
 func (s Service) CreateUser(u model.User) error {
 	_, err := s.GetUserByLogin(u.Email)
 
-	if err != nil && err.Error() != "not found" {
+	if err != nil && err.Error() != "record not found" {
 		return err
 	}
 	if err == nil {
@@ -16,7 +16,7 @@ func (s Service) CreateUser(u model.User) error {
 	}
 
 	_, err = s.GetUserByLogin(u.NickName)
-	if err != nil && err.Error() != "not found" {
+	if err != nil && err.Error() != "record not found" {
 		return err
 	}
 	if err == nil {
@@ -48,9 +48,6 @@ func (s Service) GetUserByLogin(nickOrEmail string) (model.User, error) {
 	if tx.Error != nil {
 		return u, tx.Error
 	}
-	if tx.RowsAffected == 0 {
-		return u, errors.New("not found")
-	}
 
 	return u, tx.Error
 }
@@ -63,7 +60,7 @@ func (s Service) DeleteUser(idUser string) error {
 func (s Service) UpdateUser(u model.User) error {
 	u1, err := s.GetUserByLogin(u.Email)
 
-	if err != nil && err.Error() != "not found" {
+	if err != nil && err.Error() != "record not found" {
 		return err
 	}
 	if err == nil && u1.ID != u.ID {
@@ -71,7 +68,7 @@ func (s Service) UpdateUser(u model.User) error {
 	}
 
 	u1, err = s.GetUserByLogin(u.NickName)
-	if err != nil && err.Error() != "not found" {
+	if err != nil && err.Error() != "record not found" {
 		return err
 	}
 	if err == nil && u1.ID != u.ID {

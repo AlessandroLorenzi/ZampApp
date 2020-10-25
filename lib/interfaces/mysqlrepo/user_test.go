@@ -12,8 +12,8 @@ func Test_User(t *testing.T) {
 
 	u, _ := model.NewUser(
 		`https://images.pexels.com/photos/2745151/pexels-photo-2745151.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
-		`antonio@test.it`,
-		`antonio`,
+		`testuser123@test.it`,
+		`testuser123`,
 		`Amo i cani`,
 		`pippo`,
 	)
