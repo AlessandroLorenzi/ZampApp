@@ -8,13 +8,19 @@ import (
 func (s Service) CreateUser(u model.User) error {
 	_, err := s.GetUserByLogin(u.Email)
 
-	if err != nil && err.Error() != "record not found" {
+	if err != nil && err.Error() != "not found" {
 		return err
+	}
+	if err == nil {
+		return errors.New("email in use")
 	}
 
 	_, err = s.GetUserByLogin(u.NickName)
-	if err != nil && err.Error() != "record not found" {
+	if err != nil && err.Error() != "not found" {
 		return err
+	}
+	if err == nil {
+		return errors.New("username in use")
 	}
 
 	tx := s.gormDB.Create(u)
@@ -42,13 +48,8 @@ func (s Service) GetUserByLogin(nickOrEmail string) (model.User, error) {
 	if tx.Error != nil {
 		return u, tx.Error
 	}
-
 	if tx.RowsAffected == 0 {
 		return u, errors.New("not found")
-	}
-	if tx.RowsAffected > 1 {
-		s.logger.WithField("nickOrEmail", nickOrEmail).Error("multiple records found for nickOrEmail")
-		return u, errors.New("multiple found")
 	}
 
 	return u, tx.Error
@@ -60,6 +61,23 @@ func (s Service) DeleteUser(idUser string) error {
 }
 
 func (s Service) UpdateUser(u model.User) error {
+	u1, err := s.GetUserByLogin(u.Email)
+
+	if err != nil && err.Error() != "not found" {
+		return err
+	}
+	if err == nil && u1.ID != u.ID {
+		return errors.New("email in use")
+	}
+
+	u1, err = s.GetUserByLogin(u.NickName)
+	if err != nil && err.Error() != "not found" {
+		return err
+	}
+	if err == nil && u1.ID != u.ID {
+		return errors.New("username in use")
+	}
+
 	tx := s.gormDB.Save(u)
 	return tx.Error
 }
