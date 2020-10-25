@@ -3,7 +3,7 @@ module zampapp
 go 1.15
 
 require (
-	github.com/brianvoe/sjwt v0.5.1
+	github.com/appleboy/gin-jwt/v2 v2.6.4
 	github.com/gin-gonic/gin v1.6.3
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/google/go-cmp v0.4.1 // indirect

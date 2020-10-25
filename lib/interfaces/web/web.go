@@ -1,9 +1,11 @@
 package web
 
 import (
+	"log"
 	"zampapp/lib/interfaces/mysqlrepo"
 	"zampapp/lib/usecases"
 
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -26,20 +28,33 @@ func New(
 		useCasesService: useCasesService,
 	}
 
-	router := gin.New()
+	r := gin.New()
 
-	router.GET("/api/health", s.healthCheck)
-	router.POST("/api/login", s.login)
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 
-	router.GET("/api/animal/:id_animal", s.getAnimal)
-	router.POST("/api/animal", s.newAnimal)
-	router.GET("/api/animals", s.getAnimals)
+	r.GET("/api/health", s.healthCheck)
 
-	router.GET("/api/user/:id_user", s.GetUser)
+	r.GET("/api/animal/:id_animal", s.getAnimal)
+	r.POST("/api/animal", s.newAnimal)
+	r.GET("/api/animals", s.getAnimals)
 
-	router.GET("/api/testdata", s.TestData) // TODO REMOVE
+	r.GET("/api/user_loves/:id_animal", s.newLove)
+	r.GET("/api/user_loves/", s.listAnimalsLoved)
 
-	s.server = router
+	r.GET("/api/user/:id_user", s.GetUser)
+
+	r.GET("/api/testdata", s.TestData) // TODO REMOVE
+
+	authMiddleware, _ := jwt.New(s.jwtMiddleware())
+	errInit := authMiddleware.MiddlewareInit()
+	if errInit != nil {
+		log.Fatal("authMiddleware.MiddlewareInit() Error:" + errInit.Error())
+	}
+
+	r.POST("/api/login", authMiddleware.LoginHandler)
+
+	s.server = r
 	return s
 }
 

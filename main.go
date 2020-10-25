@@ -42,6 +42,10 @@ func main() {
 	if err != nil {
 		loggerEntity.WithField("err", err).Fatal("Error animal migration")
 	}
+	err = gormDB.AutoMigrate(&model.Love{})
+	if err != nil {
+		loggerEntity.WithField("err", err).Fatal("Error love migration")
+	}
 
 	repoService := mysqlrepo.New(
 		gormDB,
