@@ -50,7 +50,8 @@ func (s *Service) login(c *gin.Context) (interface{}, error) {
 
 	u, err := s.useCasesService.Login(lp.Login, lp.Password)
 	if err == nil {
-		return u, err
+		s.logger.WithField("user", u.NickName).Info("Ritorno utente")
+		return &u, err
 	}
 	s.logger.WithField("err", err.Error()).Error("Error authentication")
 	return nil, jwt.ErrFailedAuthentication

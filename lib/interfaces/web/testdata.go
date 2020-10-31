@@ -8,7 +8,7 @@ import (
 
 // TODO REMOVE
 func (s Service) TestData(_ *gin.Context) {
-	uu := make([]model.User, 5)
+	uu := make([]model.User, 6)
 	uu[0], _ = model.NewUser(
 		`https://images.pexels.com/photos/2745151/pexels-photo-2745151.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
 		`antonio@test.it`,
@@ -44,12 +44,20 @@ func (s Service) TestData(_ *gin.Context) {
 		`Viaggio spesso e vado in giro`,
 		`paperino`,
 	)
+	uu[5], _ = model.NewUser(
+		`https://avatars0.githubusercontent.com/u/150980?s=460&u=4e1a54c01546f218f8911185cd565d33fe6c571e&v=4`,
+		`alorenzi@alorenzi.eu`,
+		`alorenzi`,
+		`test`,
+		`test`,
+	)
 
 	_ = s.repoService.CreateUser(uu[0])
 	_ = s.repoService.CreateUser(uu[1])
 	_ = s.repoService.CreateUser(uu[2])
 	_ = s.repoService.CreateUser(uu[3])
 	_ = s.repoService.CreateUser(uu[4])
+	_ = s.repoService.CreateUser(uu[5])
 
 	aa := make([]model.Animal, 4)
 	aa[0], _ = model.NewAnimal(
