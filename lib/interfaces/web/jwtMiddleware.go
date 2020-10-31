@@ -13,7 +13,7 @@ var identityKey = "user_id"
 
 func (s Service) jwtMiddleware() *jwt.GinJWTMiddleware {
 	return &jwt.GinJWTMiddleware{
-		Realm:         "test zone",
+		Realm:         `"gin"`,
 		Key:           []byte("secret key"),
 		Timeout:       time.Hour,
 		MaxRefresh:    time.Hour,
@@ -33,6 +33,7 @@ func (s *Service) jwtPayload(data interface{}) jwt.MapClaims {
 			identityKey: v.ID,
 		}
 	}
+	s.logger.Warn("empty claims")
 	return jwt.MapClaims{}
 }
 
@@ -43,13 +44,14 @@ func (s *Service) login(c *gin.Context) (interface{}, error) {
 	}
 
 	var lp loginPost
-	if err := c.ShouldBind(&lp); err != nil {
+	if err := c.ShouldBindJSON(&lp); err != nil {
 		return "", jwt.ErrMissingLoginValues
 	}
 
 	u, err := s.useCasesService.Login(lp.Login, lp.Password)
-	if err != nil {
+	if err == nil {
 		return u, err
 	}
+	s.logger.WithField("err", err.Error()).Error("Error authentication")
 	return nil, jwt.ErrFailedAuthentication
 }

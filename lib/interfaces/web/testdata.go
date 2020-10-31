@@ -18,29 +18,29 @@ func (s Service) TestData(_ *gin.Context) {
 	)
 	uu[1], _ = model.NewUser(
 		`https://images.pexels.com/photos/3294248/pexels-photo-3294248.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260`,
-		`Anna`,
 		`anna@casa.it`,
+		`Anna`,
 		`Amo gli cani tutti`,
 		`pluto`,
 	)
 	uu[2], _ = model.NewUser(
 		`https://images.pexels.com/photos/2666154/pexels-photo-2666154.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260`,
-		`Giovanna`,
 		`giovanna@gmail.com`,
+		`Giovanna`,
 		`Ho un bastardino che mi piace tanto`,
 		`paperino`,
 	)
 	uu[3], _ = model.NewUser(
 		`https://images.pexels.com/photos/4064423/pexels-photo-4064423.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260`,
-		`Silvana`,
 		`silvana@coseacaso.it`,
+		`Silvana`,
 		`Mi piacciono i gatti`,
 		`paperino`,
 	)
 	uu[4], _ = model.NewUser(
 		`https://images.pexels.com/photos/3889895/pexels-photo-3889895.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260`,
-		`Eliana`,
 		`eliana@blabla.it`,
+		`Eliana`,
 		`Viaggio spesso e vado in giro`,
 		`paperino`,
 	)
